@@ -1,6 +1,6 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, {Schema, Document} from 'mongoose';
 
-export interface IResidency {
+export interface IResidency extends Document{
     title: string;
     description:string;
     location :string;
