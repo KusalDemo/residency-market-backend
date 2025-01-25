@@ -30,7 +30,16 @@ export const loginUser = async (user: User) => {
 
         return null;
     } catch (error) {
-        console.log(`Error occurred: ${error}`);
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
+export const updateUser = async (id:string, user: User) => {
+    try{
+        await IUser.updateOne({_id:id}, user);
+        return user;
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
     }
 }
 
