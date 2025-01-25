@@ -20,3 +20,17 @@ export const registerUser = async (user: User) => {
     }
 }
 
+export const loginUser = async (user: User) => {
+    try {
+        const fetchedUser = await IUser.findOne({email: user.email});
+
+        if(fetchedUser){
+            return fetchedUser;
+        }
+
+        return null;
+    } catch (error) {
+        console.log(`Error occurred: ${error}`);
+    }
+}
+
