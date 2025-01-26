@@ -11,7 +11,7 @@ userRouter.post("/register", async (req, res) => {
         res.send(`User logged in successfully : ${response}`);
     }catch (error){
         console.error(`Error occurred: ${error}`);
-        res.status(500).send(`${error}`);
+        error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
     }
 })
 
@@ -22,7 +22,7 @@ userRouter.post("/login", async (req, res) => {
         res.send(response);
     }catch (error){
         console.error(`Error occurred: ${error}`);
-        res.status(500).send(error);
+        error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
     }
 })
 
@@ -34,7 +34,7 @@ userRouter.put("/update/:id", async (req, res) => {
         res.status(204).send(updatedUser);
     }catch (error){
         console.error(`Error occurred: ${error}`);
-        res.status(500).send(error);
+        error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
     }
 })
 
