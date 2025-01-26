@@ -18,3 +18,20 @@ export const getBookings = async (userId:string)=>{
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
     }
 }
+
+export const updateBooking = async (id:string, booking: Booking) => {
+    try{
+        await IBooking.updateOne({_id:id}, booking);
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
+export const cancelBooking = async (id:string) => {
+    try{
+        let changedBooking = await IBooking.findByIdAndUpdate(id,{status:"cancelled"});
+        return changedBooking;
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
