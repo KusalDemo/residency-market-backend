@@ -31,8 +31,7 @@ export const getResidencyById = async (id:string) => {
 
 export const getResidenciesByUserId = async (id:string) => {
     try{
-        //const residencies = await IResidency.findById(id).populate("owner", "name email");
-        const residencies = await IResidency.findById({owner: id}).populate("owner", "name email");
+        const residencies = await IResidency.find({owner: id}).populate("owner", "name email");
         return residencies;
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
