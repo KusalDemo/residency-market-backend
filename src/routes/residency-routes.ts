@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-    createResidency,
+    createResidency, deleteResidency,
     getResidencies,
     getResidenciesByUserId,
     getResidencyById, updateResidency
@@ -37,7 +37,9 @@ residencyRouter.put('/update/:id', async (req, res) => {
 
 residencyRouter.delete('/delete/:id', async (req, res) => {
     try{
-
+        const residencyId:string = req.params.id;
+        const deletedResidency = await deleteResidency(residencyId);
+        res.status(204).send();
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
     }
