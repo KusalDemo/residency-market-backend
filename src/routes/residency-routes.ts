@@ -1,5 +1,10 @@
 import express from 'express';
-import {createResidency, getResidencies, getResidencyById} from "../database/residency-data-store";
+import {
+    createResidency,
+    getResidencies,
+    getResidenciesByUserId,
+    getResidencyById
+} from "../database/residency-data-store";
 import {Residency} from "../models/Residency";
 
 
@@ -37,7 +42,7 @@ residencyRouter.delete('/delete/:id', async (req, res) => {
 
 residencyRouter.get('/', async (req, res) => {
     try{
-        let residencies = await getResidencies();
+        const residencies = await getResidencies();
         res.send(residencies);
     }catch (error){
         res.status(500).send(error);
@@ -46,7 +51,7 @@ residencyRouter.get('/', async (req, res) => {
 
 residencyRouter.get('/get/:id', async (req, res) => {
     try {
-        let residencyId = req.params.id;
+        const residencyId = req.params.id;
         const fetchedResidency = await getResidencyById(residencyId);
         res.send(fetchedResidency);
     } catch (error) {
@@ -54,5 +59,14 @@ residencyRouter.get('/get/:id', async (req, res) => {
     }
 })
 
+residencyRouter.get('/getOwns/:id', async (req, res) => {
+    try{
+        const residencyOwnerId = req.params.id;
+        const residencies = await getResidenciesByUserId(residencyOwnerId);
+        res.send(residencies);
+    }catch (error){
+        res.status(500).send(error);
+    }
+})
 
 export default residencyRouter;
