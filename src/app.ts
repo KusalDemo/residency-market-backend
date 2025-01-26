@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import customerRouter from "./routes/user-routes";
 import residencyRouter from "./routes/residency-routes";
+import bookingRouter from "./routes/booking-routes";
 
 let app = express();
 dotenv.config();
@@ -20,7 +21,8 @@ mongoose
 
 
 app.use("/api/user",customerRouter);
-app.use("/api/residency",residencyRouter)
+app.use("/api/residency",residencyRouter);
+app.use("/api/booking",bookingRouter);
 
 const port = process.env.PORT || 5000;
 app.listen(port,()=>{
