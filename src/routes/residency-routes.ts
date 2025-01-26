@@ -1,5 +1,5 @@
 import express from 'express';
-import {createResidency} from "../database/residency-data-store";
+import {createResidency, getResidencies, getResidencyById} from "../database/residency-data-store";
 import {Residency} from "../models/Residency";
 
 
@@ -35,9 +35,10 @@ residencyRouter.delete('/delete/:id', async (req, res) => {
     }
 })
 
-residencyRouter.get('/get', async (req, res) => {
+residencyRouter.get('/', async (req, res) => {
     try{
-
+        let residencies = await getResidencies();
+        res.send(residencies);
     }catch (error){
         res.status(500).send(error);
     }
@@ -45,7 +46,9 @@ residencyRouter.get('/get', async (req, res) => {
 
 residencyRouter.get('/get/:id', async (req, res) => {
     try {
-
+        let residencyId = req.params.id;
+        const fetchedResidency = await getResidencyById(residencyId);
+        res.send(fetchedResidency);
     } catch (error) {
         res.status(500).send(error);
     }
