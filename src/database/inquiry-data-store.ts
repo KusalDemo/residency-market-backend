@@ -16,3 +16,11 @@ export const addInquiry = async (inquiry: Inquiry) => {
     }
 }
 
+export const getInquiriesByUserId = async (id:string) => {
+    try{
+        const inquiries = await IInquiry.find({user: id}).populate("user", "name email").populate("residency", "title location");
+        return inquiries;
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
