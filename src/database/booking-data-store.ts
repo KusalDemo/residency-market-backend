@@ -1,9 +1,11 @@
 import {Booking} from "../models/Booking";
 import IBooking from "../models/IBooking";
+import {addResidencyBookings} from "./residency-data-store";
 
 export const bookResidency = async (booking: Booking) => {
     try{
         const completedBooking = await IBooking.create(booking);
+        await addResidencyBookings(booking.residency,completedBooking._id);
         return completedBooking;
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);

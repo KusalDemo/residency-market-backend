@@ -62,6 +62,22 @@ export const deleteResidency = async (id:string) => {
     }
 }
 
+export const addResidencyBookings = async (id:string, bookingId: string | any ) => {
+    try{
+        const updatedResidency = await IResidency.findByIdAndUpdate(id,
+            {
+                $push: {bookings: bookingId},
+                $set: {isAvailable: false}
+            },
+            {new: true}
+        );
+        if (!updatedResidency) {
+            throw new Error(`Residency with id ${id} not found`);
+        }
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
 
 
 
