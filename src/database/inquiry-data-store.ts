@@ -1,6 +1,6 @@
 import {Inquiry} from "../models/Inquiry";
 import IInquiry from "../models/IInquiry";
-import {addResidencyInquiries} from "./residency-data-store";
+import {addResidencyInquiries, deleteResidencyInquiries} from "./residency-data-store";
 
 export const addInquiry = async (inquiry: Inquiry) => {
     try{
@@ -29,6 +29,19 @@ export const getInquiriesByResidencyId = async (id:string) => {
     try{
         const inquiries = await IInquiry.find({residency: id}).populate("user", "name email");
         return inquiries;
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
+export const removeInquiry = async(inquiryId:string,userId:string, residencyId:string) => {
+    try{
+        const deletedInquiry = await IInquiry.deleteOne({_id: inquiryId, user: userId, residency: residencyId});
+        if (deletedInquiry) {
+            await deleteResidencyInquiries(residencyId,inquiryId);
+        }else{
+            throw new Error(`Inquiry not deleted`);
+        }
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
     }

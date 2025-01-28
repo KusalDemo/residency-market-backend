@@ -1,5 +1,10 @@
 import express from 'express';
-import {addInquiry, getInquiriesByResidencyId, getInquiriesByUserId} from "../database/inquiry-data-store";
+import {
+    addInquiry,
+    getInquiriesByResidencyId,
+    getInquiriesByUserId,
+    removeInquiry
+} from "../database/inquiry-data-store";
 import {Inquiry} from "../models/Inquiry";
 
 const inquiryRouter = express.Router();
@@ -33,6 +38,17 @@ inquiryRouter.get('/getResidencyInquiries/:residencyId', async (req, res) => {
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
     }
 });
+
+inquiryRouter.delete('/delete/:id', async (req, res) => {
+    try{
+        const inquiryId = req.params.id;
+        const userAndResidency = req.body;
+        await removeInquiry(inquiryId, userAndResidency.userId,userAndResidency.residencyId);
+        res.status(204).send();
+    }catch (error){
+        error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
+    }
+})
 
 
 export default inquiryRouter;
