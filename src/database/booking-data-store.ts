@@ -1,6 +1,6 @@
 import {Booking} from "../models/Booking";
 import IBooking from "../models/IBooking";
-import {addResidencyBookings} from "./residency-data-store";
+import {addResidencyBookings, cancelResidencyBookings} from "./residency-data-store";
 
 export const bookResidency = async (booking: Booking) => {
     try{
@@ -14,7 +14,7 @@ export const bookResidency = async (booking: Booking) => {
 
 export const getBookings = async (userId:string)=>{
     try{
-        let allBookings = await IBooking.find({user: userId}).populate("user", "name email").populate("residency", "title location");
+        const allBookings = await IBooking.find({user: userId}).populate("user", "name email").populate("residency", "title location");
         return allBookings;
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
@@ -31,8 +31,13 @@ export const updateBooking = async (id:string, booking: Booking) => {
 
 export const cancelBooking = async (id:string) => {
     try{
-        let changedBooking = await IBooking.findByIdAndUpdate(id,{status:"cancelled"});
-        return changedBooking;
+        const changedBooking = await IBooking.findByIdAndUpdate(id,{status:"cancelled"});
+        if(changedBooking){
+            await cancelResidencyBookings(changedBooking.residency,id);
+            return changedBooking;
+        }else{
+            throw new Error(`Booking with id ${id} not found`);
+        }
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
     }
