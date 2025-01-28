@@ -14,7 +14,7 @@ export const bookResidency = async (booking: Booking) => {
 
 export const getBookings = async (userId:string)=>{
     try{
-        let allBookings = await IBooking.find({user: userId}).populate("user", "name email");
+        let allBookings = await IBooking.find({user: userId}).populate("user", "name email").populate("residency", "title location");
         return allBookings;
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
