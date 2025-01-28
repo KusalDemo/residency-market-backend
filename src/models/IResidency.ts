@@ -7,6 +7,13 @@ export interface IResidency extends Document{
     price:number;
     owner: mongoose.Schema.Types.ObjectId;
     isAvailable: boolean;
+    facilities: [
+        {
+            bedrooms: number,
+            bathrooms: number,
+            area: number
+        }
+    ];
     images: string[];
     bookings: mongoose.Schema.Types.ObjectId[];
     inquiries: mongoose.Schema.Types.ObjectId[];
@@ -19,6 +26,13 @@ let ResidencySchema = new Schema({
     price: {type: Number, required: true},
     owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     isAvailable: {type: Boolean, required: true, default: true},
+    facilities: [
+        {
+            bedrooms: { type: Number, required: true },
+            bathrooms: { type: Number, required: true },
+            area: { type: Number, required: true }
+        }
+    ],
     images: {type: [String], required: true},
     bookings: [{type: mongoose.Schema.Types.ObjectId, ref: 'Booking'}],
     inquiries: [{type: mongoose.Schema.Types.ObjectId, ref: 'Inquiry'}]
