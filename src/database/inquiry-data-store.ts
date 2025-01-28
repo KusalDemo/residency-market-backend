@@ -24,3 +24,12 @@ export const getInquiriesByUserId = async (id:string) => {
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
     }
 }
+
+export const getInquiriesByResidencyId = async (id:string) => {
+    try{
+        const inquiries = await IInquiry.find({residency: id}).populate("user", "name email");
+        return inquiries;
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
