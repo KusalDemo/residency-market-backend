@@ -1,19 +1,23 @@
 
 import {Residency} from "../models/Residency";
 import IResidency from "../models/IResidency";
+import IUser from "../models/IUser";
+import {addUserResidency} from "./user-data-store";
 
 export const createResidency = async (residency : Residency)=>{
     try{
-        await IResidency.create(residency);
+        let savedResidency = await IResidency.create(residency);
+        await addUserResidency(residency.owner, savedResidency._id);
         return residency;
     }catch (error){
+        console.log(`ERROR: ${error}`);
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
     }
 }
 
 export const getResidencies = async ()=>{
     try{
-        const residencies = await IResidency.find();
+        const residencies = await IResidency.find().populate("owner", "email");
         return residencies;
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);

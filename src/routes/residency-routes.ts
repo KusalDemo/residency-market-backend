@@ -12,7 +12,18 @@ const residencyRouter = express.Router();
 
 residencyRouter.post('/create', async (req, res) => {
     try{
-        const residencyToCreate: Residency = req.body;
+        const title = req.body.title;
+        const description = req.body.description;
+        const location = req.body.location;
+        const price = req.body.price;
+        const owner = req.body.owner;
+        const isAvailable = req.body.isAvailable;
+        const facilities = req.body.facilities;
+        const images = req.body.images;
+        const bookings = req.body.bookings;
+        const inquiries = req.body.inquiries;
+
+        const residencyToCreate: Residency = new Residency(title, description, location, price, owner, isAvailable, facilities, images, bookings, inquiries);
         const residencyPromise = await createResidency(residencyToCreate);
         if (residencyPromise) {
             res.status(201).send(residencyPromise);
@@ -27,7 +38,19 @@ residencyRouter.post('/create', async (req, res) => {
 residencyRouter.put('/update/:id', async (req, res) => {
     try{
         const residencyId:string = req.params.id;
-        const residency:Residency = req.body;
+
+        const title = req.body.title;
+        const description = req.body.description;
+        const location = req.body.location;
+        const price = req.body.price;
+        const owner = req.body.owner;
+        const isAvailable = req.body.isAvailable;
+        const facilities = req.body.facilities;
+        const images = req.body.images;
+        const bookings = req.body.bookings;
+        const inquiries = req.body.inquiries;
+
+        const residency: Residency = new Residency(title, description, location, price, owner, isAvailable, facilities, images, bookings, inquiries);
         const updatedResidency = await updateResidency(residencyId, residency);
         res.status(204).send();
     }catch (error){

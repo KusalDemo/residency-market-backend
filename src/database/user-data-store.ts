@@ -43,3 +43,19 @@ export const updateUser = async (id:string, user: User) => {
     }
 }
 
+export const addUserResidency = async (id:string, residencyId: string | any ) => {
+    try{
+        const updatedUser = await IUser.findByIdAndUpdate(id,
+            {
+                $push: {residencies: residencyId},
+            },
+            {new: true}
+        );
+        if (!updatedUser) {
+            throw new Error(`User with id : ${id} not found`);
+        }
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
