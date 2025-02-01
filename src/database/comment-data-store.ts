@@ -1,10 +1,11 @@
 import {Comment} from "../models/Comment";
 import IComment from "../models/IComment";
+import {addUserComment} from "./user-data-store";
 
 export const addComment = async (comment: Comment) => {
     try{
-        const newComment = new Comment(comment.user, comment.residency, comment.message, comment.createdAt, comment.upVotes, comment.downVotes);
-        const savedComment = IComment.create(newComment);
+        const savedComment = IComment.create(comment);
+        // await addUserComment(comment.user, savedComment._id);
         return savedComment
     }catch (error){
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);

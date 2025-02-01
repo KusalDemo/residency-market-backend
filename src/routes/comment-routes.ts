@@ -1,11 +1,12 @@
 import express from 'express';
+import {addComment} from "../database/comment-data-store";
 
 const commentRouter = express.Router();
 
 commentRouter.post('/create', async (req, res) => {
     try{
         const comment = req.body;
-        const savedComment = `Comment saved: ${comment}`;
+        const savedComment = addComment(comment);
         res.status(201).send(savedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
