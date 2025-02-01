@@ -22,7 +22,8 @@ commentRouter.post('/create', async (req, res) => {
 commentRouter.delete('/delete/:id', async (req, res) => {
     try{
         const commentId = req.params.id;
-        const deletedComment = await deleteComment(commentId);
+        const userId = req.body.userId;
+        const deletedComment = await deleteComment(commentId, userId);
         res.status(204).send(deletedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);

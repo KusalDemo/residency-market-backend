@@ -59,3 +59,36 @@ export const addUserResidency = async (id:string, residencyId: string | any ) =>
     }
 }
 
+export const addUserComment = async (id:string, commentId: string | any ) => {
+    try{
+        const updatedUser = await IUser.findByIdAndUpdate(id,
+            {
+                $push: {comments: commentId},
+            },
+            {new: true}
+        );
+        if (!updatedUser) {
+            throw new Error(`User with id : ${id} not found`);
+        }
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
+export const deleteUserComment = async (id:string, commentId: string | any ) => {
+    try{
+        const updatedUser = await IUser.findByIdAndUpdate(id,
+            {
+                $pull: {comments: commentId},
+            },
+            {new: true}
+        );
+        if (!updatedUser) {
+            throw new Error(`User with id : ${id} not found`);
+        }
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
+
