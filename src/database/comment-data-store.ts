@@ -57,4 +57,13 @@ export const downVoteComment = async (commentId: string) => {
     }
 }
 
+export const getAllComments = async () => {
+    try{
+        const comments = await IComment.find();
+        return comments;
+    }catch (error){
+        throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
+    }
+}
+
 

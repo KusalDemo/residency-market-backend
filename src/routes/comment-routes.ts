@@ -1,12 +1,18 @@
 import express from 'express';
-import {addComment} from "../database/comment-data-store";
+import {
+    addComment,
+    deleteComment, downVoteComment,
+    getAllComments,
+    getCommentsByResidencyId,
+    updateComment, upVoteComment
+} from "../database/comment-data-store";
 
 const commentRouter = express.Router();
 
 commentRouter.post('/create', async (req, res) => {
     try{
         const comment = req.body;
-        const savedComment = addComment(comment);
+        const savedComment = await addComment(comment);
         res.status(201).send(savedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
@@ -16,7 +22,7 @@ commentRouter.post('/create', async (req, res) => {
 commentRouter.delete('/delete/:id', async (req, res) => {
     try{
         const commentId = req.params.id;
-        const deletedComment = `Comment deleted: ${commentId}`;
+        const deletedComment = await deleteComment(commentId);
         res.status(204).send(deletedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
@@ -26,7 +32,8 @@ commentRouter.delete('/delete/:id', async (req, res) => {
 commentRouter.put('/update/:id', async (req, res) => {
     try{
         const commentId = req.params.id;
-        const updatedComment = `Comment updated: ${commentId}`;
+        let commentToUpdate = req.body;
+        const updatedComment = await updateComment(commentId, commentToUpdate);
         res.status(204).send(updatedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
@@ -35,8 +42,8 @@ commentRouter.put('/update/:id', async (req, res) => {
 
 commentRouter.get('/get/:id', async (req, res) => {
     try{
-        const commentId = req.params.id;
-        const fetchedComment = `Comment fetched: ${commentId}`;
+        const residencyId = req.params.id;
+        const fetchedComment = await getCommentsByResidencyId(residencyId)
         res.status(200).send(fetchedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
@@ -45,7 +52,7 @@ commentRouter.get('/get/:id', async (req, res) => {
 
 commentRouter.get('/get', async (req, res) => {
     try{
-        const fetchedComments = `Comments fetched: Data...`;
+        const fetchedComments = await getAllComments();
         res.status(200).send(fetchedComments);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
@@ -55,7 +62,7 @@ commentRouter.get('/get', async (req, res) => {
 commentRouter.put('/upvote/:id', async (req, res) => {
     try{
         const commentId = req.params.id;
-        const upvotedComment = `Comment upvoted: ${commentId}`;
+        const upvotedComment = upVoteComment(commentId);
         res.status(204).send(upvotedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
@@ -65,7 +72,7 @@ commentRouter.put('/upvote/:id', async (req, res) => {
 commentRouter.put('/downvote/:id', async (req, res) => {
     try{
         const commentId = req.params.id;
-        const downvotedComment = `Comment downvoted: ${commentId}`;
+        const downvotedComment = downVoteComment(commentId);
         res.status(204).send(downvotedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
