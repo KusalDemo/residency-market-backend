@@ -13,7 +13,7 @@ commentRouter.post('/create', async (req, res) => {
     try{
         const comment = req.body;
         const savedComment = await addComment(comment);
-        res.status(201).send(savedComment);
+        res.status(200).json(savedComment);
     }catch (error){
         error instanceof Error ? res.status(400).send(error.message) : res.status(500).send(error);
     }
@@ -63,6 +63,7 @@ commentRouter.get('/get', async (req, res) => {
 commentRouter.put('/upvote/:id', async (req, res) => {
     try{
         const commentId = req.params.id;
+        console.log(`commentId : ${commentId}`);
         const upvotedComment = upVoteComment(commentId);
         res.status(204).send(upvotedComment);
     }catch (error){

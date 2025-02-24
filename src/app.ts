@@ -6,6 +6,8 @@ import residencyRouter from "./routes/residency-routes";
 import bookingRouter from "./routes/booking-routes";
 import inquiryRouter from "./routes/inquiry-routes";
 import commentRouter from "./routes/comment-routes";
+import {authenticateToken} from "./routes/user-routes";
+import {verifyToken} from "./util/jwt";
 
 let app = express();
 dotenv.config();
@@ -26,6 +28,9 @@ mongoose
 
 
 app.use("/api/user",customerRouter);
+
+app.use(authenticateToken);
+
 app.use("/api/residency",residencyRouter);
 app.use("/api/booking",bookingRouter);
 app.use("/api/inquiry",inquiryRouter);

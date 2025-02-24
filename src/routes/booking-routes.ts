@@ -7,6 +7,7 @@ const bookingRouter = express.Router();
 bookingRouter.post('/book', async (req, res) => {
     try {
         const booking: Booking = req.body;
+        console.log(`booking: ${JSON.stringify(booking)}`);
         const placedBooking = await bookResidency(booking);
         res.status(201).send(placedBooking);
     } catch (error) {

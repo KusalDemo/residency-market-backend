@@ -7,7 +7,7 @@ export const registerUser = async (user: User) => {
         const fetchedUser = await IUser.findOne({email: user.email});
 
         if (!fetchedUser) {
-            // const encryptedPassword = await bcrypt.hash(password, 10);
+            /*const encryptedPassword = await bcrypt.hash(user.password, 10);*/
             const newUser = new User(user.name, user.email, user.password, user.residencies, user.inquiries);
 
             await IUser.create(newUser);
@@ -24,10 +24,15 @@ export const loginUser = async (user: User) => {
     try {
         const fetchedUser = await IUser.findOne({email: user.email});
 
-        if(fetchedUser){
+        if (fetchedUser) {
+           /* const isPasswordValid = await bcrypt.compare(user.password, fetchedUser.password);*/
+            const passwordMatch = fetchedUser.password.trim() === user.password.trim();
+            if (!passwordMatch) {
+                throw new Error("Invalid email or password");
+            }
+            console.log(`User logged in successfully : ${fetchedUser}`);
             return fetchedUser;
         }
-
         return null;
     } catch (error) {
         throw error instanceof Error ? error : new Error(`Error occurred: ${error}`);
