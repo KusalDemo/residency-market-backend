@@ -1,7 +1,6 @@
 import express from 'express';
 import {loginUser, registerUser, updateUser} from "../database/user-data-store";
 import {User} from "../models/User";
-import jwt, {Secret} from "jsonwebtoken";
 import {generateToken, verifyToken} from "../util/jwt";
 import dotenv from "dotenv";
 
@@ -49,6 +48,12 @@ userRouter.put("/update/:id", async (req, res) => {
 
 
 export async function authenticateToken(req : express.Request, res : express.Response, next : express.NextFunction){
+    if (req.method === 'GET' || req.method === 'OPTIONS') {
+        console.log(`Method: ${req.method} || URL: ${req.url}`);
+        next();
+        return;
+    }
+
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(' ')[1];
 
@@ -65,8 +70,6 @@ export async function authenticateToken(req : express.Request, res : express.Res
         res.status(401).send(err);
     }
 }
-
-
 
 export default userRouter;
 
