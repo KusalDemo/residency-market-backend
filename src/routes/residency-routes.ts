@@ -68,7 +68,7 @@ residencyRouter.delete('/delete/:id', async (req, res) => {
     }
 })
 
-residencyRouter.get('/', async (req, res) => {
+residencyRouter.get('/get-all', async (req, res) => {
     try{
         const residencies = await getResidencies();
         res.send(residencies);
