@@ -34,6 +34,7 @@ mongoose
 
 app.use("/api/user",customerRouter);
 
+// @ts-ignore
 app.use(authenticateToken);
 
 app.use("/api/residency",residencyRouter);

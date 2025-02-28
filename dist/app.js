@@ -16,7 +16,12 @@ let app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use(express_1.default.json());
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+}));
 mongoose_1.default
     .connect(process.env.MONGO_URI)
     .then(() => {
@@ -26,6 +31,7 @@ mongoose_1.default
     console.log(err);
 });
 app.use("/api/user", user_routes_1.default);
+// @ts-ignore
 app.use(user_routes_2.authenticateToken);
 app.use("/api/residency", residency_routes_1.default);
 app.use("/api/booking", booking_routes_1.default);

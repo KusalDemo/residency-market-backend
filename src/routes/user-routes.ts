@@ -47,7 +47,7 @@ userRouter.put("/update/:id", async (req, res) => {
 })
 
 
-export async function authenticateToken(req : express.Request, res : express.Response, next : express.NextFunction){
+export async function authenticateToken(req: express.Request, res: express.Response, next: express.NextFunction) {
     if (req.method === 'GET' || req.method === 'OPTIONS') {
         console.log(`Method: ${req.method} || URL: ${req.url}`);
         next();
@@ -57,19 +57,22 @@ export async function authenticateToken(req : express.Request, res : express.Res
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(' ')[1];
 
-    if(!token)res.status(401).send('No token provided');
+    if (!token) {
+        return res.status(401).send('No token provided');
+    }
 
-    try{
+    try {
         const payload = await verifyToken(token as string);
-        if(payload){
+        if (payload) {
             next();
-        }else{
-            res.status(403).send('Invalid or expired token');
+        } else {
+            return res.status(403).send('Invalid or expired token');
         }
-    }catch(err){
-        res.status(401).send(err);
+    } catch (err) {
+        return res.status(401).send(err);
     }
 }
+
 
 export default userRouter;
 

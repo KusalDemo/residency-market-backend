@@ -68,19 +68,20 @@ function authenticateToken(req, res, next) {
         }
         const authHeader = req.headers.authorization;
         const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.split(' ')[1];
-        if (!token)
-            res.status(401).send('No token provided');
+        if (!token) {
+            return res.status(401).send('No token provided');
+        }
         try {
             const payload = yield (0, jwt_1.verifyToken)(token);
             if (payload) {
                 next();
             }
             else {
-                res.status(403).send('Invalid or expired token');
+                return res.status(403).send('Invalid or expired token');
             }
         }
         catch (err) {
-            res.status(401).send(err);
+            return res.status(401).send(err);
         }
     });
 }
